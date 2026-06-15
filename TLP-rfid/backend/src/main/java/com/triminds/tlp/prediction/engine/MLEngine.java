@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MLEngine {
 
-    public com.triminds.tlp.prediction.dto.PredictionResult predictDemand(String context) {
+    public com.triminds.tlp.prediction.dto.PredictionResultDTO predictDemand(String context) {
         double confidence = 0.75;
 
         String prediction = context == null || context.isBlank()
                 ? "DEMAND_STABLE"
                 : "DEMAND_ANALYZED";
 
-        return new com.triminds.tlp.prediction.dto.PredictionResult(
+        return new com.triminds.tlp.prediction.dto.PredictionResultDTO(
                 prediction,
                 confidence
         );

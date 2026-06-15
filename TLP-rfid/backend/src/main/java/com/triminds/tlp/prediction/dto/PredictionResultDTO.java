@@ -1,14 +1,14 @@
 package com.triminds.tlp.prediction.dto;
 
-public class PredictionResult {
+public class PredictionResultDTO {
 
     private String prediction;
     private double confidence;
 
-    public PredictionResult() {
+    public PredictionResultDTO() {
     }
 
-    public PredictionResult(String prediction, double confidence) {
+    public PredictionResultDTO(String prediction, double confidence) {
         this.prediction = prediction;
         this.confidence = confidence;
     }

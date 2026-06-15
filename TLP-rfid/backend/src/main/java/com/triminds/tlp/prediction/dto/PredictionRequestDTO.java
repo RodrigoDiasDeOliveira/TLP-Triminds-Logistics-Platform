@@ -1,6 +1,6 @@
 package com.triminds.tlp.prediction.dto;
 
-public class PredictionRequest {
+public class PredictionRequestDTO {
 
     private String companyId;
     private String predictionType;
@@ -10,7 +10,7 @@ public class PredictionRequest {
     private double demand;
     private int horizonDays;
 
-    public PredictionRequest() {
+    public PredictionRequestDTO() {
     }
 
     public String getCompanyId() {

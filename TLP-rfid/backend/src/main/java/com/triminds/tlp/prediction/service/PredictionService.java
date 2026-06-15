@@ -1,7 +1,7 @@
 package com.triminds.tlp.prediction.service;
 
-import com.triminds.tlp.prediction.dto.PredictionRequest;
-import com.triminds.tlp.prediction.dto.PredictionResult;
+import com.triminds.tlp.prediction.dto.PredictionRequestDTO;
+import com.triminds.tlp.prediction.dto.PredictionResultDTO;
 import com.triminds.tlp.prediction.engine.MLEngine;
 import com.triminds.tlp.prediction.engine.PredictionEngine;
 import com.triminds.tlp.prediction.entity.Prediction;

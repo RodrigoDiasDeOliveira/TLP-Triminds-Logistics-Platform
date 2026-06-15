@@ -32,8 +32,9 @@ public class PredictionService {
     }
 
     @Transactional
-    public PredictionResult makePrediction(PredictionRequest request) {
-        PredictionResult result = mlEngine.predictDemand(request.getContext());
+    public PredictionResultDTO makePrediction(PredictionRequestDTO request) {
+
+        PredictionResultDTO result = mlEngine.predictDemand(request.getContext());
 
         Prediction prediction = new Prediction();
         prediction.setCompanyId(request.getCompanyId());

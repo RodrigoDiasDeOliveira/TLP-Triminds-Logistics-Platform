@@ -1,6 +1,6 @@
 package com.triminds.tlp.security.jwt;
 
-import com.triminds.tlp.gateway.security.tenant.MultiTenantContext;
+import com.triminds.tlp.security.tenant.MultiTenantContext;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,27 +25,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest req,
+            HttpServletResponse res,
+            FilterChain chain
+    ) throws ServletException, IOException {
+
         String header = req.getHeader("Authorization");
+
         if (header != null && header.startsWith("Bearer ")) {
             try {
-                Claims c = jwtService.parse(header.substring(7));
-                String email = c.getSubject();
-                String role = c.get("role", String.class);
-                String tenantId = c.get("tenantId", String.class);
+                String token = header.substring(7);
+                Claims claims = jwtService.parse(token);
 
-                if (tenantId != null) MultiTenantContext.setTenantId(tenantId);
+                String email = claims.getSubject();
+                String role = claims.get("role", String.class);
+                String tenantId = claims.get("tenantId", String.class);
 
-                var auth = new UsernamePasswordAuthenticationToken(
-                        email, null,
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                );
+                if (tenantId != null) {
+                    MultiTenantContext.setTenantId(tenantId);
+                }
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
             } catch (Exception ignored) {
-                // token inválido => segue sem auth => 401 nos endpoints protegidos
+                SecurityContextHolder.clearContext();
             }
         }
+
         try {
             chain.doFilter(req, res);
         } finally {

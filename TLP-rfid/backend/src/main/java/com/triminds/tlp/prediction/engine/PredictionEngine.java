@@ -1,5 +1,6 @@
 package com.triminds.tlp.prediction.engine;
 
+import com.triminds.tlp.prediction.model.PredictionResult;
 import com.triminds.tlp.rfid.model.RfidTag;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +22,14 @@ public class PredictionEngine {
     }
 
     public PredictionResult predict(RfidTag tag) {
-
-        // 🔵 1. ML se houver confiança futura
         if (hasMLCapability(tag)) {
             return mlEngine.predict(tag);
         }
 
-        // 🟡 2. histórico REAL (AGORA CONECTADO)
         if (hasHistory(tag)) {
             return historicalEngine.predict(tag);
         }
 
-        // 🟢 3. fallback seguro
         return ruleEngine.predict(tag);
     }
 
@@ -41,6 +38,6 @@ public class PredictionEngine {
     }
 
     private boolean hasHistory(RfidTag tag) {
-        return true; // agora sempre consulta eventos
+        return true;
     }
 }

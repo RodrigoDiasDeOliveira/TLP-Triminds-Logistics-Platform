@@ -2,9 +2,12 @@ package com.triminds.tlp.prediction.service;
 
 import com.triminds.tlp.prediction.dto.PredictionRequest;
 import com.triminds.tlp.prediction.dto.PredictionResult;
+import com.triminds.tlp.prediction.engine.MLEngine;
+import com.triminds.tlp.prediction.engine.PredictionEngine;
 import com.triminds.tlp.prediction.entity.Prediction;
 import com.triminds.tlp.prediction.repository.PredictionRepository;
-import lombok.RequiredArgsConstructor;
+import com.triminds.tlp.rfid.model.RfidTag;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +15,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class PredictionService {
 
     private final MLEngine mlEngine;
+    private final PredictionEngine predictionEngine;
     private final PredictionRepository predictionRepository;
+
+    public PredictionService(
+            MLEngine mlEngine,
+            PredictionEngine predictionEngine,
+            PredictionRepository predictionRepository
+    ) {
+        this.mlEngine = mlEngine;
+        this.predictionEngine = predictionEngine;
+        this.predictionRepository = predictionRepository;
+    }
 
     @Transactional
     public PredictionResult makePrediction(PredictionRequest request) {
@@ -36,7 +49,16 @@ public class PredictionService {
         return result;
     }
 
+    public String predictNextLocation(RfidTag tag) {
+        return predictionEngine.predict(tag).getPrediction();
+    }
+
     public List<Prediction> getRecentPredictions(String companyId, int limit) {
-        return predictionRepository.findTopByCompanyIdOrderByCreatedAtDesc(companyId, limit);
+        int safeLimit = Math.max(1, Math.min(limit, 500));
+
+        return predictionRepository.findByCompanyIdOrderByCreatedAtDesc(
+                companyId,
+                PageRequest.of(0, safeLimit)
+        );
     }
 }

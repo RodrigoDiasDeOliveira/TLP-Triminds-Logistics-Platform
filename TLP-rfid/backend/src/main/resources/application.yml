@@ -9,20 +9,28 @@ spring:
   jpa:
     open-in-view: false
     properties:
-      hibernate.format\_sql: true
+      hibernate.format_sql: true
 
 jwt:
-  secret: ${JWT\_SECRET:MinhaChaveSuperSecretaTrocarEmProd0123456789}
+  secret: ${JWT_SECRET:MinhaChaveSuperSecretaTrocarEmProd0123456789}
   expiration: 86400000
 
 springdoc:
-  swagger-ui.path: /swagger-ui.html
-  api-docs.path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
 
 management:
-  endpoints.web.exposure.include: health,info,metrics,prometheus
-  endpoint.health.show-details: when\_authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
 
-logging.level:
-  com.triminds.tlp: DEBUG
-  org.springframework.security: INFO
+logging:
+  level:
+    com.triminds.tlp: DEBUG
+    org.springframework.security: INFO

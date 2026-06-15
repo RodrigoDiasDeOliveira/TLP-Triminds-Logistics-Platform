@@ -17,7 +17,7 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:86400000}")
     private long expiration;
 
     private SecretKey key() {
@@ -26,9 +26,13 @@ public class JwtService {
 
     public String generateToken(String email, String role, String tenantId) {
         long now = System.currentTimeMillis();
+
         return Jwts.builder()
                 .subject(email)
-                .claims(Map.of("role", role, "tenantId", tenantId))
+                .claims(Map.of(
+                        "role", role,
+                        "tenantId", tenantId
+                ))
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + expiration))
                 .signWith(key())
@@ -44,7 +48,26 @@ public class JwtService {
     }
 
     public boolean isValid(String token) {
-        try { return parse(token).getExpiration().after(new Date()); }
-        catch (Exception e) { return false; }
+        try {
+            return parse(token).getExpiration().after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean validateToken(String token) {
+        return isValid(token);
+    }
+
+    public String extractEmail(String token) {
+        return parse(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return parse(token).get("role", String.class);
+    }
+
+    public String extractTenantId(String token) {
+        return parse(token).get("tenantId", String.class);
     }
 }

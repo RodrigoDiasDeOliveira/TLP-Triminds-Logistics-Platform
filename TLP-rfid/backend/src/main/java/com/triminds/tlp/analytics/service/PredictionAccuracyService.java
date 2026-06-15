@@ -1,5 +1,6 @@
 package com.triminds.tlp.analytics.service;
 
+import com.triminds.tlp.analytics.dto.PredictionKpiDTO;
 import com.triminds.tlp.prediction.engine.HistoricalEngine;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +13,20 @@ public class PredictionAccuracyService {
         this.historicalEngine = historicalEngine;
     }
 
-    public double calculateAccuracy() {
-
+    public PredictionKpiDTO calculateAccuracy() {
         long events = historicalEngine.countEventsLast24h();
-
         long shipments = historicalEngine.countShipments();
 
-        if (events == 0) return 0;
+        if (events == 0) {
+            return new PredictionKpiDTO(0, 0, 0);
+        }
 
-        return (double) shipments / events;
+        double accuracy = (double) shipments / events;
+
+        return new PredictionKpiDTO(
+                accuracy,
+                events,
+                Math.min(events, shipments)
+        );
     }
 }

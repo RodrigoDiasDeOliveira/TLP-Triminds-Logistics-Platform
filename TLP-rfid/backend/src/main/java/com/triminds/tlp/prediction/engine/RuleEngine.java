@@ -1,5 +1,6 @@
 package com.triminds.tlp.prediction.engine;
 
+import com.triminds.tlp.prediction.model.PredictionResult;
 import com.triminds.tlp.rfid.model.RfidTag;
 import org.springframework.stereotype.Component;
 
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Component;
 public class RuleEngine {
 
     public PredictionResult predict(RfidTag tag) {
-
         String current = tag.getLocation();
 
         String next;

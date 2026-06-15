@@ -1,14 +1,29 @@
 package com.triminds.tlp.prediction.engine;
 
-import com.triminds.tlp.prediction.model.PredictionResult;
+import com.triminds.tlp.rfid.model.RfidTag;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MLEngine {
 
-    public PredictionResult predict(String entityId, String context) {
+    public com.triminds.tlp.prediction.dto.PredictionResult predictDemand(String context) {
+        double confidence = 0.75;
 
-        double score = Math.random(); // substitui depois por DL4J real
+        String prediction = context == null || context.isBlank()
+                ? "DEMAND_STABLE"
+                : "DEMAND_ANALYZED";
+
+        return new com.triminds.tlp.prediction.dto.PredictionResult(
+                prediction,
+                confidence
+        );
+    }
+
+    public com.triminds.tlp.prediction.model.PredictionResult predict(
+            String entityId,
+            String context
+    ) {
+        double score = Math.random();
 
         String prediction;
 
@@ -20,11 +35,20 @@ public class MLEngine {
             prediction = "LOW_ACTIVITY";
         }
 
-        return new PredictionResult(
+        return new com.triminds.tlp.prediction.model.PredictionResult(
                 entityId,
+                prediction,
                 context,
-                score,
-                prediction
+                score
+        );
+    }
+
+    public com.triminds.tlp.prediction.model.PredictionResult predict(RfidTag tag) {
+        return new com.triminds.tlp.prediction.model.PredictionResult(
+                tag.getTagId(),
+                "analysis-required",
+                "ML",
+                0.70
         );
     }
 }

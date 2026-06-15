@@ -1,6 +1,6 @@
-package com.triminds.gateway.security;
+package com.triminds.tlp.gateway.security.filter;
 
-import com.triminds.gateway.security.jwt.JwtService;
+import com.triminds.tlp.security.jwt.JwtService;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;

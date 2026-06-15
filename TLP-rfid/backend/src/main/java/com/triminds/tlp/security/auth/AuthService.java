@@ -29,7 +29,7 @@ public class AuthService {
         }
         String tenantId = u.getCompany() != null ? u.getCompany().getTenantId() : "default";
         String token = jwt.generateToken(u.getEmail(), u.getRole().name(), tenantId);
-        return TokenResponse.bearer(token, 86\_400);
+        return TokenResponse.bearer(token, 86_400);
     }
 
     public TokenResponse register(RegisterRequest req) {
@@ -37,7 +37,7 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "E-mail já cadastrado");
         }
         Company company = companies.findByTenantId(req.companyTenantId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT\_FOUND, "Empresa não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Empresa não encontrada"));
 
         User u = User.builder()
                 .email(req.email())
@@ -48,6 +48,6 @@ public class AuthService {
         users.save(u);
 
         String token = jwt.generateToken(u.getEmail(), u.getRole().name(), company.getTenantId());
-        return TokenResponse.bearer(token, 86\_400);
+        return TokenResponse.bearer(token, 86_400);
     }
 }

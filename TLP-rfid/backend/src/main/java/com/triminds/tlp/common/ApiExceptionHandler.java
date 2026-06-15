@@ -36,7 +36,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String,Object>> generic(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL\_SERVER\_ERROR).body(Map.of(
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "timestamp", Instant.now(),
                 "status", 500,
                 "message", ex.getMessage() == null ? "erro interno" : ex.getMessage()));

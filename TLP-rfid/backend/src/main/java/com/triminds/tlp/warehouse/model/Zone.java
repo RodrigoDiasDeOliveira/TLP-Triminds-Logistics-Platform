@@ -13,4 +13,22 @@ public class Zone {
 
     @ManyToOne
     private Warehouse warehouse;
+    public Long getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
 }

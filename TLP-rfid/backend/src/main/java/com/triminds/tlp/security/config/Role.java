@@ -1,4 +1,4 @@
-package com.triminds.tlp.security;
+package com.triminds.tlp.security.config;
 
 public enum Role {
     ADMIN,

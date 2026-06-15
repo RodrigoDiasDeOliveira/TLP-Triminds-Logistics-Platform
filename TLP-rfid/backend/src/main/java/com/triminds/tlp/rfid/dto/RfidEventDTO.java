@@ -20,4 +20,8 @@ public class RfidEventDTO {
     private String productCode;
     private String companyId;
     private Map<String, Object> metadata;
+
+    
+
+    
 }

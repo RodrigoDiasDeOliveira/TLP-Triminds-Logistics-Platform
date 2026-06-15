@@ -14,4 +14,8 @@ public class RfidWebSocketHandler {
         System.out.println("WebSocket - Evento RFID recebido: " + event.getTagId());
         return event;
     }
+    
+    public void getTagId() {
+
+    }
 }

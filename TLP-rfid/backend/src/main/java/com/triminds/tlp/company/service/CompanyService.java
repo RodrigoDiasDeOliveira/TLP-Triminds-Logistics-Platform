@@ -24,8 +24,8 @@ public class CompanyService {
         return repository.findAll();
     }
 
-    public Company findById(UUID id) {
+    public Company findById(Long id) {
         return repository.findById(id)
                 .orElseThrow();
     }
-}
+} 

@@ -1,6 +1,6 @@
 package com.triminds.tlp.rfid;
 
-import com.triminds.tlp.rfid.controller.RfidTagController;
+import com.triminds.tlp.rfid.controller.RfidEventController;
 import com.triminds.tlp.rfid.service.RfidTagService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RfidTagControllerTest {
+public class RfidEventControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnAllRfidTags() throws Exception {
-        mockMvc.perform(get("/api/rfid"))
+    void shouldReturnAllRfidEvents() throws Exception {
+        mockMvc.perform(get("/api/rfid/events"))
                 .andExpect(status().isOk());
     }
 

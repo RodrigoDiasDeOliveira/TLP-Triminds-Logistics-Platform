@@ -2,7 +2,7 @@ package com.triminds.tlp.config;
 
 import com.triminds.tlp.company.model.Company;
 import com.triminds.tlp.company.repository.CompanyRepository;
-import com.triminds.tlp.user.model.Role;
+import com.triminds.tlp.security.config.Role;
 import com.triminds.tlp.user.model.User;
 import com.triminds.tlp.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;

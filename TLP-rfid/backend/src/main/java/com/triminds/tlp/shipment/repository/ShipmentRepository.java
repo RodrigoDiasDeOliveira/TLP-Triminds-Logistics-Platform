@@ -1,13 +1,15 @@
 package com.triminds.tlp.shipment.repository;
 
 import com.triminds.tlp.shipment.model.Shipment;
+import com.triminds.tlp.shipment.model.ShipmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
-import java.util.UUID;
 
-public interface ShipmentRepository extends JpaRepository<Shipment, UUID> {
-
-    List<Shipment> findByStatus(String status);
-
-    List<Shipment> findByCompanyId(UUID companyId);
+@Repository
+public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
+    List<Shipment> findByStatus(ShipmentStatus status);
+    List<Shipment> findByCompanyId(Long companyId);
+    long countByStatus(ShipmentStatus status);
 }

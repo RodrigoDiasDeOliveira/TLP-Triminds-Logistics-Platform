@@ -1,65 +1,60 @@
 package com.triminds.tlp.shipment.model;
 
-import com.triminds.tlp.company.model.Company;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "shipments")
 public class Shipment {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(name = "tracking_code", nullable = false, unique = true, length = 60)
     private String trackingCode;
 
-    @ManyToOne
-    private Company company;
-
+    @Column(nullable = false)
     private String origin;
 
+    @Column(nullable = false)
     private String destination;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private ShipmentStatus status = ShipmentStatus.PENDING;
+
+    @Column(name = "company_id", nullable = false)
+    private Long companyId;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Company getCompany() {
-        return company;
+    @PrePersist
+    void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.status == null) this.status = ShipmentStatus.PENDING;
     }
-     public LocalDateTime getCreatedAt() {
-         return createdAt;
-     }
-     public String getDestination() {
-         return destination;
-     }
-     public UUID getId() {
-         return id;
-     }
-     public String getOrigin() {
-         return origin;
-     }
-     public String getTrackingCode() {
-         return trackingCode;
-     }
-     public void setCompany(Company company) {
-         this.company = company;
-     }
-     public void setCreatedAt(LocalDateTime createdAt) {
-         this.createdAt = createdAt;
-     }
-     public void setDestination(String destination) {
-         this.destination = destination;
-     }
-     public void setId(UUID id) {
-         this.id = id;
-     }
-     public void setOrigin(String origin) {
-         this.origin = origin;
-     }
-     public void setTrackingCode(String trackingCode) {
-         this.trackingCode = trackingCode;
-     }
 
-     }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getTrackingCode() { return trackingCode; }
+    public void setTrackingCode(String trackingCode) { this.trackingCode = trackingCode; }
+
+    public String getOrigin() { return origin; }
+    public void setOrigin(String origin) { this.origin = origin; }
+
+    public String getDestination() { return destination; }
+    public void setDestination(String destination) { this.destination = destination; }
+
+    public ShipmentStatus getStatus() { return status; }
+    public void setStatus(ShipmentStatus status) { this.status = status; }
+
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+}

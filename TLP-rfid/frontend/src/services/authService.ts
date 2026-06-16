@@ -1,10 +1,26 @@
 import api from "./api";
 
-export const login = async (email: string, password: string) => {
-  const response = await api.post("/auth/login", {
-    email,
-    password,
-  });
+export interface LoginRequest { email: string; password: string; }
+export interface LoginResponse { accessToken: string; tokenType?: string; }
 
-  return response.data.accesstoken;
+export const authService = {
+  async login(email: string, password: string): Promise<string> {
+    const { data } = await api.post<LoginResponse>("/auth/login", { email, password });
+    const token = data.accessToken;
+    if (!token) throw new Error("Resposta de login sem accessToken");
+    localStorage.setItem("token", token);
+    return token;
+  },
+
+  logout() {
+    localStorage.removeItem("token");
+  },
+
+  getToken(): string | null {
+    return localStorage.getItem("token");
+  },
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem("token");
+  },
 };

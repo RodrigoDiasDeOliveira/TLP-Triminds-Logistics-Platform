@@ -1,6 +1,7 @@
 # TLP - Triminds Logistics Platform
 
-<img width="1536" height="1024" alt="Dashboard Screenshot" src="https://github.com/user-attachments/assets/8fd806af-447d-4e38-9692-8a83ff09ab3a" />
+<img width="1168" height="784" alt="2CvMJ" src="https://github.com/user-attachments/assets/809a7a56-54cb-452f-8222-77d8cf07b8bd" />
+
 
 **Real-time Logistics Platform with RFID + Artificial Intelligence**
 

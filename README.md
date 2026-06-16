@@ -7,7 +7,6 @@
 
 A **multi-tenant SaaS** solution for complete warehouse traceability using RFID technology, Machine Learning predictions, and advanced operational dashboards.
 
----
 
 ## 🎯 Current Features (June 2026)
 
@@ -73,55 +72,6 @@ Bashcd TLP-rfid/frontend
 npm install
 npm run dev
 Access: http://localhost:5173
-Demo Credentials
-
-Email: demo@triminds.com
-Password: demo123
-
-
-📡 Main Endpoints
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-MethodEndpointDescriptionPOST/api/auth/loginJWT LoginPOST/api/rfid/events/ingestIngest RFID eventsGET/api/rfid/events/realtimeReal-time eventsGET/api/analytics/kpisOperational KPIsPOST/api/predictionMake predictionsGET/api/prediction/recentRecent predictions
-WebSocket: /ws/rfid (STOMP)
 
 ✅ Current Status
 
@@ -142,5 +92,4 @@ Production Ready: In progress
  Swagger / OpenAPI Documentation
  Full CI/CD with GitHub Actions
 
-
-Made with ❤️ by Triminds Initiative (2025–2026)
+Made with by Triminds Initiative (2025–2026)

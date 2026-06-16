@@ -2,7 +2,7 @@ package com.triminds.tlp.warehouse.model;
 
 import com.triminds.tlp.company.model.Company;
 import jakarta.persistence.*;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "warehouses")

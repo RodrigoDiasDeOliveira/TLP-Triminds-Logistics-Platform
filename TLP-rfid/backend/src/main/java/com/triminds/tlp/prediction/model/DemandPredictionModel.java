@@ -1,10 +1,10 @@
-package com.triminds.prediction.model;
+package com.triminds.tlp.prediction.model;
 
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
-import java.io.File;
+
 
 public class DemandPredictionModel {
 

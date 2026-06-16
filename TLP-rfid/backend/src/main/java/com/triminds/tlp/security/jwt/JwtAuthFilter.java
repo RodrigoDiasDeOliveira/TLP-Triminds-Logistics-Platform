@@ -1,22 +1,22 @@
 package com.triminds.tlp.security.jwt;
 
-import com.triminds.tlp.security.tenant.MultiTenantContext;
-import io.jsonwebtoken.Claims;
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
 
-
-public class JwtAuthFilter extends OncePerRequestFilter {
+@Component
+public class JwtAuthFilter implements Filter {
 
     private final JwtService jwtService;
 
@@ -25,45 +25,43 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest req,
-            HttpServletResponse res,
-            FilterChain chain
-    ) throws ServletException, IOException {
+    public void doFilter(ServletRequest servletRequest, 
+                         ServletResponse servletResponse, 
+                         FilterChain filterChain) 
+            throws IOException, ServletException {
 
-        String header = req.getHeader("Authorization");
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        if (header != null && header.startsWith("Bearer ")) {
-            try {
-                String token = header.substring(7);
-                Claims claims = jwtService.parse(token);
+        String authHeader = request.getHeader("Authorization");
 
-                String email = claims.getSubject();
-                String role = claims.get("role", String.class);
-                String tenantId = claims.get("tenantId", String.class);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                if (tenantId != null) {
-                    MultiTenantContext.setTenantId(tenantId);
-                }
+        try {
+            String token = authHeader.substring(7);
 
-                UsernamePasswordAuthenticationToken auth =
+            if (jwtService.isValid(token)) {
+                String email = jwtService.extractEmail(token);
+                String role = jwtService.extractRole(token);
+                String tenantId = jwtService.extractTenantId(token);
+
+                UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 email,
                                 null,
                                 List.of(new SimpleGrantedAuthority("ROLE_" + role))
                         );
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
-
-            } catch (Exception e) {
-                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                request.setAttribute("tenantId", tenantId);
             }
+        } catch (Exception e) {
+            System.err.println("JWT Filter Error: " + e.getMessage());
         }
 
-        try {
-            chain.doFilter(req, res);
-        } finally {
-            MultiTenantContext.clear();
-        }
+        filterChain.doFilter(request, response);
     }
 }

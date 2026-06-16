@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.triminds.tlp.security.auth.RegisterRequest;
+
 
 @RestController
 @RequestMapping("/api/auth")

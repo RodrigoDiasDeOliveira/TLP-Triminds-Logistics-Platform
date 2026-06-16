@@ -1,7 +1,6 @@
-package com.triminds.tlp.rfid;
+package com.triminds.tlp.shipment.rfid;
 
-import com.triminds.tlp.rfid.controller.RfidEventController;
-import com.triminds.tlp.rfid.service.RfidTagService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,4 +1,4 @@
-package com.triminds.prediction.model;
+package com.triminds.tlp.prediction.model;
 
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;

@@ -2,14 +2,20 @@ server:
   port: 8080
 
 spring:
-  application:
-    name: tlp-rfid
-  profiles:
-    active: dev
+  datasource:
+    url: jdbc:h2:mem:trimindsdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   jpa:
-    open-in-view: false
-    properties:
-      hibernate.format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
 
 jwt:
   secret: ${JWT_SECRET:MinhaChaveSuperSecretaTrocarEmProd0123456789}

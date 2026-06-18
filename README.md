@@ -8,7 +8,7 @@
 A **multi-tenant SaaS** solution for complete warehouse traceability using RFID technology, Machine Learning predictions, and advanced operational dashboards.
 
 
-## 🎯 Current Features (June 2026)
+
 
 ### Implemented Functionalities
 

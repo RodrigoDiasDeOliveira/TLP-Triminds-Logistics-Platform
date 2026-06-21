@@ -49,7 +49,65 @@ jobs:
 
         with:
 
-          context: ./backend
+          context name: Security Scan
+
+on:
+
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+
+
+jobs:
+
+  scan:
+
+    runs-on: ubuntu-latest
+
+
+    defaults:
+      run:
+        working-directory: TLP-rfid/backend
+
+
+    steps:
+
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+
+
+      - name: Resolve Maven dependencies
+        run: mvn dependency:resolve
+
+
+
+      - name: Run Trivy scan
+        uses: aquasecurity/trivy-action@master
+        with:
+
+          scan-type: fs
+
+          scan-ref: .
+
+          severity: HIGH,CRITICAL
+
+          ignore-unfixed: true
+
+          exit-code: 1
 
           push: true
 

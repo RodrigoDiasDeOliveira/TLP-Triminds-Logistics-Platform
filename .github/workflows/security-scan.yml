@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
 
+    defaults:
+      run:
+        working-directory: TLP-rfid/backend
+
 
     steps:
 
@@ -26,7 +30,21 @@ jobs:
 
 
 
-      - name: Run Trivy filesystem scan
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+
+
+
+      - name: Resolve Maven dependencies
+        run: mvn dependency:resolve
+
+
+
+      - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
 

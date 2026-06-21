@@ -1,0 +1,11 @@
+gps:
+  enabled: true
+  default-provider: "generic"  # ou "tomtom", "samsara", etc.
+  providers:
+    generic:
+      base-url: ${GPS_API_BASE_URL:https://api.example.com}
+      api-key: ${GPS_API_KEY:demo-key}
+      polling-interval-seconds: 15
+      timeout-seconds: 8
+  tracking:
+    max-events-per-session: 1000

@@ -1,60 +1,76 @@
 package com.triminds.tlp.shipment.model;
 
+import com.triminds.tlp.tracking.ShipmentTrackingSession;
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "shipments")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Shipment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Column(name = "tracking_code", nullable = false, unique = true, length = 60)
-    private String trackingCode;
-
-    @Column(nullable = false)
-    private String origin;
-
-    @Column(nullable = false)
-    private String destination;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private ShipmentStatus status = ShipmentStatus.PENDING;
-
-    @Column(name = "company_id", nullable = false)
     private Long companyId;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private String shipmentNumber;        // Número identificador da carga
+    private String origin;
+    private String destination;
 
-    @PrePersist
-    void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.status == null) this.status = ShipmentStatus.PENDING;
+    private String vehicleId;
+    private String driverName;
+
+    @Enumerated(EnumType.STRING)
+    private ShipmentStatus status;        // Enum existente ou novo
+
+    private LocalDateTime departureTime;
+    private LocalDateTime estimatedArrivalTime;
+    private LocalDateTime actualArrivalTime;
+
+    // === NOVOS CAMPOS PARA TRACKING INTELIGENTE ===
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "tracking_session_id")
+    private ShipmentTrackingSession trackingSession;
+
+    private LocalDateTime predictedEta;
+    private String currentTrackingStatus;
+
+    private String rfidTag;               // Tag principal associada
+
+    // === MÉTODOS DE DOMÍNIO ===
+    
+    public void startTracking() {
+        if (this.trackingSession == null) {
+            this.trackingSession = ShipmentTrackingSession.builder()
+                    .companyId(this.companyId)
+                    .shipmentId(this.id.toString())
+                    .vehicleId(this.vehicleId)
+                    .startTime(LocalDateTime.now())
+                    .currentStatus("IN_TRANSIT")
+                    .build();
+        }
+        this.currentTrackingStatus = "IN_TRANSIT";
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void updateTrackingInfo(String status, LocalDateTime predictedEta) {
+        this.currentTrackingStatus = status;
+        this.predictedEta = predictedEta;
+        
+        if (this.trackingSession != null) {
+            this.trackingSession.setCurrentStatus(status);
+            this.trackingSession.setPredictedEta(predictedEta != null ? predictedEta.toString() : null);
+        }
+    }
 
-    public String getTrackingCode() { return trackingCode; }
-    public void setTrackingCode(String trackingCode) { this.trackingCode = trackingCode; }
-
-    public String getOrigin() { return origin; }
-    public void setOrigin(String origin) { this.origin = origin; }
-
-    public String getDestination() { return destination; }
-    public void setDestination(String destination) { this.destination = destination; }
-
-    public ShipmentStatus getStatus() { return status; }
-    public void setStatus(ShipmentStatus status) { this.status = status; }
-
-    public Long getCompanyId() { return companyId; }
-    public void setCompanyId(Long companyId) { this.companyId = companyId; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public boolean isDelayed() {
+        return predictedEta != null && LocalDateTime.now().isAfter(predictedEta);
+    }
 }

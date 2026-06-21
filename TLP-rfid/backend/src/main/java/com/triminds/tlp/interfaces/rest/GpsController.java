@@ -1,8 +1,8 @@
 package com.triminds.tlp.interfaces.rest;
 
 import com.triminds.tlp.integration.gps.GpsIntegrationAdapter;
+import com.triminds.tlp.interfaces.TrackingResponse;
 import com.triminds.tlp.interfaces.rest.gps.GpsTrackingRequest;
-import com.triminds.tlp.interfaces.rest.gps.TrackingResponse;
 import com.triminds.tlp.tracking.TrackingEnrichmentService;
 import com.triminds.tlp.tracking.TrackingService;
 import lombok.RequiredArgsConstructor;

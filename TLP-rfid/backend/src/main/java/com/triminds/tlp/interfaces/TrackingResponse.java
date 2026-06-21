@@ -1,6 +1,6 @@
-package com.triminds.tlp.interfaces.rest.gps;
+package com.triminds.tlp.interfaces;
 
-import com.triminds.tlp.prediction.PredictionResult;
+import com.triminds.tlp.prediction.model.PredictionResult;
 import com.triminds.tlp.tracking.TrackingEvent;
 import lombok.Builder;
 import lombok.Data;

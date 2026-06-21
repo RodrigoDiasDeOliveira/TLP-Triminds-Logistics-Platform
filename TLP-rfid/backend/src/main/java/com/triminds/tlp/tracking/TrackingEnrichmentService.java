@@ -1,6 +1,6 @@
 package com.triminds.tlp.tracking;
 
-import com.triminds.tlp.prediction.TrackingContext;
+import com.triminds.tlp.prediction.dto.TrackingContext;
 import com.triminds.tlp.tracking.repository.ShipmentTrackingSessionRepository;
 import com.triminds.tlp.tracking.repository.TrackingEventRepository;
 import lombok.RequiredArgsConstructor;

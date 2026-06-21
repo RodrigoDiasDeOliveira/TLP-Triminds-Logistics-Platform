@@ -24,12 +24,46 @@ jobs:
 
 
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+
+          distribution: temurin
+
+          java-version: 17
+
+          cache: maven
+
+
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+
+        with:
+
+          path: ~/.m2/repository
+
+          key: maven-${{ hashFiles('TLP-rfid/backend/pom.xml') }}
+
+          restore-keys: |
+            maven-
+
+
+
+      - name: Download Maven dependencies
+        working-directory: TLP-rfid/backend
+        run: mvn dependency:resolve
+
+
+
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
 
         with:
 
           scan-type: fs
+
+          scan-ref: .
 
           severity: HIGH,CRITICAL
 

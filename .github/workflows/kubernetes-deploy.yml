@@ -1,0 +1,63 @@
+name: Deploy to Kubernetes
+
+on:
+
+  workflow_run:
+    workflows:
+      - "Docker Build & Push"
+
+    types:
+      - completed
+
+
+
+jobs:
+
+
+  deploy:
+
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+
+    runs-on: ubuntu-latest
+
+
+
+    steps:
+
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+
+      - name: Setup Kubernetes context
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
+          echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+
+
+      - name: Validate cluster connection
+        run: |
+          kubectl get nodes
+
+
+
+      - name: Deploy Kubernetes manifests
+        run: |
+          kubectl apply -f kubernetes/
+
+
+
+      - name: Update backend image
+        run: |
+          kubectl set image deployment/ocl-backend \
+          ocl-backend=triminds/ocl-backend:${{ github.event.workflow_run.head_sha }}
+
+
+
+      - name: Verify rollout
+        run: |
+          kubectl rollout status deployment/ocl-backend
